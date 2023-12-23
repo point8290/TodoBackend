@@ -3,10 +3,14 @@ import express, {
 } from "express";
 import { config } from "./config/config";
 import Logging from "./library/logging";
+import TodoRoutes from "./routes/Todo"
+import userROutes from "./routes/User"
+import compression from "compression";
 
 
 const StartServer = (app: Express) => {
 
+    app.use(compression())
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
 
@@ -22,6 +26,8 @@ const StartServer = (app: Express) => {
         next();
     });
 
+    app.use('/todo', TodoRoutes);
+    app.use('/user', userROutes);
 
     app.get("/ping", (req: Request, res: Response) => {
         res.status(200).json({ message: "Acknowledged" });
