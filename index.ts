@@ -1,15 +1,15 @@
-import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
-
-dotenv.config();
+import express, { Express } from "express";
+import { connect } from "mongoose";
+import { config } from "./src/config/config";
+import Logging from "./src/library/logging";
+import StartServer from "./src/server";
 
 const app: Express = express();
-const port = process.env.PORT || 3000;
 
-app.get("/", (req: Request, res: Response) => {
-    res.send("Express + TypeScript Server");
-});
+StartServer(app);
 
-app.listen(port, () => {
-    console.log(`[server]: Server is running at http://localhost:${port}`);
+connect(config.mongo.url, { retryWrites: true, w: "majority" }).then(() => {
+    Logging.info("Connectes to MongoDB");
+}).catch((err) => {
+    Logging.error(err)
 });
