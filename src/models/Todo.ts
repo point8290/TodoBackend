@@ -1,7 +1,15 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-export interface ITodoModel extends Document {
 
+export interface ITodo {
+    title: string,
+    description: string,
+    dueDate: Date,
+    completed: Boolean,
+}
+
+export interface ITodoModel extends ITodo, Document {
+    user: string
 }
 
 const TodoSchema: Schema = new Schema({

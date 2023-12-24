@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import * as Joi from "joi";
 import { IAuth, ISignup } from "../models/User";
 import Logging from "../services/logging";
+import { ITodo } from "../models/Todo";
 
 const loginSchema = Joi.object<IAuth>({
     email: Joi.string().email().lowercase().required(),
@@ -15,41 +16,58 @@ const registerSchema = Joi.object<ISignup>({
     confirmPassword: Joi.string().equal(Joi.ref('password')).options({ messages: { 'any.only': 'Password does not match' } })
 });
 
+const todoSchema = Joi.object<ITodo>({
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+    dueDate: Joi.date().required(),
+    completed: Joi.boolean(),
+})
+
+const updateTodoSchema = Joi.object<ITodo>({
+    title: Joi.string().empty(''),
+    description: Joi.string().empty(''),
+    dueDate: Joi.date().empty(''),
+    completed: Joi.boolean(),
+})
+
 export default function (validate: string) {
 
     return async function (req: Request, res: Response, next: NextFunction) {
-        switch (validate) {
-            case "login":
-                try {
+        try {
+            switch (validate) {
+                case "login":
+
                     const loginValidation = await loginSchema.validateAsync(req.body, { abortEarly: false })
                     req.body = loginValidation
-                }
-                catch (error) {
 
-                    res.status(400).json({
-                        error
-                    });
-                    return;
-                }
-                break;
-            case "signup":
-                try {
+                    break;
+                case "signup":
 
                     const signupValidation = await registerSchema.validateAsync(req.body, { abortEarly: false });
                     req.body = signupValidation
-                } catch (error) {
-                    Logging.error(error);
-                    res.status(400).json({
-                        error,
-                    });
-                    return;
-                }
 
-                break;
+                    break;
+                case "createTodo":
 
-            default:
-                break;
+                    const todoValidation = await todoSchema.validateAsync(req.body, { abortEarly: false });
+                    req.body = todoValidation
 
+                case "updateTodo":
+
+                    const updateTodoValidation = await updateTodoSchema.validateAsync(req.body, { abortEarly: false });
+                    req.body = updateTodoValidation
+
+                default:
+                    break;
+
+            }
+
+        } catch (error) {
+            res.status(500).json({
+                error,
+            });
+
+            return;
         }
 
         next()
