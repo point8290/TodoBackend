@@ -1,11 +1,15 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-
-
-export interface IUserModel extends Document {
-    name: string,
+export interface IAuth {
     password: string,
     email: string
+}
+
+export interface IUserModel extends IAuth, Document {
+    name: string
+}
+export interface ISignup extends IUserModel {
+    confirmPassword: string
 }
 
 const UserSchema: Schema = new Schema({
@@ -13,7 +17,7 @@ const UserSchema: Schema = new Schema({
         type: String, required: true
     },
     email: {
-        type: String, required: true
+        type: String, required: true, unique: true
     },
     password: {
         type: String, required: true,

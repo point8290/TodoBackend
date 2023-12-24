@@ -1,14 +1,15 @@
 import express from "express";
 import controller from "../controllers/Todo"
+import { validateToken } from "../middleware/AuthToken";
 
 
 const router = express.Router();
 
-router.post('/create', controller.createTodo);
-router.get('/:id', controller.readTodo);
-router.get('/', controller.readAllTodos);
-router.patch('/:id', controller.updateTodo);
-router.delete('/:id', controller.readAllTodos);
+router.post('/create', validateToken, controller.createTodo);
+router.get('/:id', validateToken, controller.readTodo);
+router.get('/', validateToken, controller.readAllTodos);
+router.patch('/:id', validateToken, controller.updateTodo);
+router.delete('/:id', validateToken, controller.readAllTodos);
 
 export = router;
 

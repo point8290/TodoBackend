@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-import mongoose, { connect } from "mongoose";
 
 dotenv.config()
 
@@ -11,6 +10,7 @@ const DB_CONNECTION_STRING = `mongodb+srv://${DB_USERNAME}:${DB_USER_PASSWORD}@c
 
 const SERVER_PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 
+const SECRET_KEY = process.env.JWT_SECRET_KEY || ''
 
 export const config = {
     mongo: {
@@ -18,5 +18,8 @@ export const config = {
     },
     server: {
         port: SERVER_PORT
+    },
+    jwt: {
+        secretKey: SECRET_KEY
     }
 }

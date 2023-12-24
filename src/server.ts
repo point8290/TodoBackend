@@ -2,7 +2,7 @@ import express, {
     Express, Request, Response, NextFunction
 } from "express";
 import { config } from "./config/config";
-import Logging from "./library/logging";
+import Logging from "./services/logging";
 import TodoRoutes from "./routes/Todo"
 import userROutes from "./routes/User"
 import compression from "compression";
