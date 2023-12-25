@@ -1,6 +1,6 @@
 import express from "express";
 import controller from "../controllers/Todo"
-import { validateToken } from "../middleware/AuthToken";
+import { validateToken } from "../middleware/ValidateToken";
 import validate from "../middleware/validators";
 
 

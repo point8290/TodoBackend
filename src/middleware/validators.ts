@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import * as Joi from "joi";
 import { IAuth, ISignup } from "../models/User";
-import Logging from "../services/logging";
 import { ITodo } from "../models/Todo";
 
 const loginSchema = Joi.object<IAuth>({

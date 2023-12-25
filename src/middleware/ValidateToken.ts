@@ -1,7 +1,6 @@
 import { config } from "../config/config";
 import * as jwt from "jsonwebtoken"
 import { NextFunction, Request, Response } from "express";
-import Logging from "../services/logging";
 
 const SECRET_KEY = config.jwt.secretKey || ''
 
@@ -31,7 +30,7 @@ export const validateToken = (req: Request, res: Response, next: NextFunction) =
         }
 
     } else {
-        res.status(404).json({
+        res.status(401).json({
             message: "Not Authorized"
         });
     }

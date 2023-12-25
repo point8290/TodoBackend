@@ -18,7 +18,7 @@ export const generateToken = (user: IUserModel) => {
         return token;
 
     } else {
-        throw new Error("Server Error: Error in generating token");
+        throw "Server Error: Error in generating token";
     }
 
 }

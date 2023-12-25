@@ -3,7 +3,6 @@ import Todo from "../models/Todo";
 import User from "../models/User";
 import Logging from "../services/logging";
 
-
 const createTodo = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
@@ -24,7 +23,6 @@ const createTodo = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 const readTodo = async (req: Request, res: Response, next: NextFunction) => {
-    Logging.info("read todo")
     const todoId = req.params.id;
     try {
         const todo = await Todo.findById(todoId).populate('user', { name: 1, _id: 0 });
@@ -81,5 +79,14 @@ const readAllTodos = async (req: Request, res: Response, next: NextFunction) => 
     }
 
 }
+
+export const expireTodo = () => {
+
+    Todo.updateMany({ "completed": false, "dueDate": { "$lt": new Date() } }, { "completed": true })
+        .then((data) => { Logging.info(data) })
+        .catch((error) => { Logging.info(error) })
+}
+
+
 
 export default { createTodo, readAllTodos, readTodo, deleteTodo, updateTodo };

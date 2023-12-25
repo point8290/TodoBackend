@@ -6,8 +6,7 @@ import Logging from "./services/logging";
 import TodoRoutes from "./routes/Todo"
 import userROutes from "./routes/User"
 import compression from "compression";
-
-
+import { scheduleExpireTodoTask } from "./services/schedulerService";
 const StartServer = (app: Express) => {
 
     app.use(compression())
@@ -36,12 +35,12 @@ const StartServer = (app: Express) => {
     app.use((req: Request, res: Response) => {
         const error = new Error("Url not found");
 
-        Logging.error(error);
         res.status(404).json({ message: "url not found" })
     })
 
     app.listen(config.server.port, () => {
         Logging.info(`[server]: Server is running at http://localhost:${config.server.port}`);
+        scheduleExpireTodoTask();
     });
 
 }
