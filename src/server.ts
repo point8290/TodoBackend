@@ -2,11 +2,14 @@ import express, {
     Express, Request, Response, NextFunction
 } from "express";
 import { config } from "./config/config";
-import Logging from "./library/logging";
-
-
+import Logging from "./services/logging";
+import TodoRoutes from "./routes/Todo"
+import userROutes from "./routes/User"
+import compression from "compression";
+import { scheduleExpireTodoTask } from "./services/schedulerService";
 const StartServer = (app: Express) => {
 
+    app.use(compression())
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
 
@@ -22,6 +25,8 @@ const StartServer = (app: Express) => {
         next();
     });
 
+    app.use('/todo', TodoRoutes);
+    app.use('/user', userROutes);
 
     app.get("/ping", (req: Request, res: Response) => {
         res.status(200).json({ message: "Acknowledged" });
@@ -30,12 +35,12 @@ const StartServer = (app: Express) => {
     app.use((req: Request, res: Response) => {
         const error = new Error("Url not found");
 
-        Logging.error(error);
         res.status(404).json({ message: "url not found" })
     })
 
     app.listen(config.server.port, () => {
         Logging.info(`[server]: Server is running at http://localhost:${config.server.port}`);
+        scheduleExpireTodoTask();
     });
 
 }

@@ -1,8 +1,8 @@
 import express, { Express } from "express";
 import { connect } from "mongoose";
-import { config } from "./src/config/config";
-import Logging from "./src/library/logging";
-import StartServer from "./src/server";
+import { config } from "./config/config";
+import Logging from "./services/logging";
+import StartServer from "./server";
 
 const app: Express = express();
 
